@@ -31,9 +31,13 @@ export class MainPage extends Component {
 
   // Go To Chat
   joinChat = () => {
-    console.log(this.state);
+    const body = {
+      username: this.state.username,
+      password: this.state.password,
+    };
 
-    axios.post('http://localhost:5000');
+    console.log('Sending ' + body.username);
+
     // this.setState({
     //   page: 'chat',
     // });
@@ -75,7 +79,11 @@ export class MainPage extends Component {
       case 'login':
         return (
           <ThemeProvider theme={theme}>
-            <Login joinChat={this.joinChat} goBack={this.goBack} />
+            <Login
+              joinChat={this.joinChat}
+              goBack={this.goBack}
+              username={this.state.username}
+            />
           </ThemeProvider>
         );
       case 'register':
@@ -85,6 +93,7 @@ export class MainPage extends Component {
               joinChat={this.joinChat}
               goBack={this.goBack}
               handleChange={this.handleChange}
+              state={this.state}
             />
           </ThemeProvider>
         );

@@ -3,10 +3,16 @@ import Grid from '@material-ui/core/Grid';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import { render } from 'react-dom';
 import { withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant='filled' {...props} />;
+}
 
 const styles = (theme) => ({
   root: {
@@ -26,19 +32,45 @@ const styles = (theme) => ({
 });
 
 class Register extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+    };
+  }
   register = (e) => {
     e.preventDefault();
-    this.props.joinChat();
+    //this.props.joinChat();
+    const { username, password } = this.props.state;
+    const body = { username, password };
+    axios.post('http://localhost:5000/api/users/', body).then((res) => {
+      console.log(res.data);
+      if (res.data.msg == 'User Created') {
+        this.setState({ open: true });
+      }
+    });
   };
+
   goBack = (e) => {
     e.preventDefault();
     this.props.goBack();
+  };
+
+  handleClose = (e) => {
+    this.state.open = false;
   };
 
   render() {
     const { classes, handleChange } = this.props;
     return (
       <div>
+        <Snackbar
+          open={this.state.open}
+          autoHideDuration={2000}
+          onClose={() => this.setState({ open: false })}
+        >
+          <Alert severity='success'>User Created!</Alert>
+        </Snackbar>
         <Grid
           container
           direction='column'
