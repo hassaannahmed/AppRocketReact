@@ -1,0 +1,25 @@
+.outerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #1a1a1d;
+}
+
+.container {
+  flex-direction: column;
+  justify-content: space-between;
+  background: #212121;
+  border-radius: 8px;
+  height: 60%;
+  width: 35%;
+}
+
+.contacts {
+  flex-direction: column;
+  justify-content: space-between;
+  background: #2d2d2d;
+  border-radius: 8px;
+  height: 60%;
+  width: 15%;
+}

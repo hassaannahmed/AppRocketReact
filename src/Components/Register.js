@@ -17,7 +17,7 @@ function Alert(props) {
 const styles = (theme) => ({
   root: {
     '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-      borderColor: '#d3d3d3',
+      borderColor: '#FE8A4D',
     },
     '&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
       borderColor: 'white',
@@ -27,7 +27,7 @@ const styles = (theme) => ({
     },
   },
   input: {
-    color: '#F48FBA',
+    color: '#FE8A4D',
   },
 });
 
@@ -77,6 +77,7 @@ class Register extends Component {
           alignItems='center'
           justify='center'
           spacing={3}
+          style={{ minHeight: '100vh', maxWidth: '100%' }}
         >
           <Grid item xs={12}>
             <form noValidate autoComplete='off'>
@@ -115,8 +116,6 @@ class Register extends Component {
           </Grid>
           <Grid item xs={6}>
             <Button
-              component={Link}
-              to='/Register'
               variant='outlined'
               color='secondary'
               onClick={this.register}
@@ -125,13 +124,7 @@ class Register extends Component {
             </Button>
           </Grid>
           <Grid item xs={6}>
-            <Button
-              component={Link}
-              to='/Register'
-              variant='outlined'
-              color='primary'
-              onClick={this.goBack}
-            >
+            <Button variant='outlined' color='primary' onClick={this.goBack}>
               BACK
             </Button>
           </Grid>

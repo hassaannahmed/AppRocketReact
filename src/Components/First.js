@@ -21,11 +21,10 @@ export class First extends Component {
           alignItems='center'
           justify='center'
           spacing={3}
+          style={{ minHeight: '100vh', maxWidth: '100%' }}
         >
           <Grid item xs={12}>
             <Button
-              component={Link}
-              to='/Register'
               variant='outlined'
               color='secondary'
               onClick={this.register}
@@ -34,13 +33,7 @@ export class First extends Component {
             </Button>
           </Grid>
           <Grid item xs={12}>
-            <Button
-              component={Link}
-              to='/Login'
-              variant='outlined'
-              color='primary'
-              onClick={this.login}
-            >
+            <Button variant='outlined' color='primary' onClick={this.login}>
               Login
             </Button>
           </Grid>

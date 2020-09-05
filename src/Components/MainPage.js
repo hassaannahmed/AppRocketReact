@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -8,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import First from './First';
 import Login from './Login';
 import Register from './Register';
-import Chat from './Chat';
+import Chat from './Chat/Chat';
 
 import axios from 'axios';
 
@@ -18,7 +17,7 @@ const theme = createMuiTheme({
       main: '#90CAf9',
     },
     secondary: {
-      main: '#F48FBA',
+      main: '#FE8A4D',
     },
   },
 });
@@ -27,20 +26,17 @@ export class MainPage extends Component {
     page: 'first',
     username: '',
     password: '',
+    id: '',
   };
 
   // Go To Chat
-  joinChat = () => {
-    const body = {
-      username: this.state.username,
-      password: this.state.password,
-    };
+  joinChat = (id) => {
+    console.log(id);
 
-    console.log('Sending ' + body.username);
-
-    // this.setState({
-    //   page: 'chat',
-    // });
+    this.setState({
+      id: id,
+      page: 'chat',
+    });
   };
 
   // Go Back
@@ -83,6 +79,8 @@ export class MainPage extends Component {
               joinChat={this.joinChat}
               goBack={this.goBack}
               username={this.state.username}
+              handleChange={this.handleChange}
+              state={this.state}
             />
           </ThemeProvider>
         );
@@ -100,7 +98,7 @@ export class MainPage extends Component {
       case 'chat':
         return (
           <ThemeProvider theme={theme}>
-            <Chat joinChat={this.joinChat} goBack={this.goBack} />
+            <Chat state={this.state} />
           </ThemeProvider>
         );
     }
