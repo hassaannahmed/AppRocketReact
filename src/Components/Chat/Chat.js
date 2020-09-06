@@ -25,6 +25,9 @@ import Contacts from '../Contacts/Contacts';
 import axios from 'axios';
 import ChatTextField from '../ChatTextField/ChatTextField';
 
+import socketIOClient from 'socket.io-client';
+const ENDPOINT = 'http://localhost:5000';
+
 const styles = (theme) => ({
   root: {
     '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
@@ -41,7 +44,7 @@ const styles = (theme) => ({
     color: '#74CAEB',
   },
 });
-
+var socket;
 class Chat extends Component {
   state = {
     loggedInUsername: '',
@@ -58,7 +61,23 @@ class Chat extends Component {
       conversation: [],
       allConversations: [],
       typed: '',
+      endpoint: ENDPOINT,
     };
+    socket = socketIOClient(this.state.endpoint);
+    socket.on('message', (message) => {
+      console.log('received');
+      const msg = {
+        conversationId: message.conversationId,
+        msgText: message.msgText,
+        senderId: message.id,
+      };
+      console.log('pushed');
+      let convo = this.state.conversation;
+      convo.push(msg);
+      this.setState({
+        conversation: convo,
+      });
+    });
   }
 
   // Change Chat With
@@ -78,6 +97,8 @@ class Chat extends Component {
         console.log('All Messages');
         this.setState({ conversation: res.data });
       });
+
+    socket.emit('joinRoom', { userId: this.state.loggedIn, room: id });
   };
 
   componentDidMount() {
@@ -112,14 +133,14 @@ class Chat extends Component {
       conversationId: this.state.conversationId,
       msgText: this.state.typed,
     };
+    socket.emit('chatMessage', grabMessages);
+    this.setState({
+      typed: '',
+    });
     axios.post(
       'http://localhost:5000/api/conversations/messages/new',
       grabMessages
     );
-
-    this.setState({
-      typed: '',
-    });
   };
 
   render() {

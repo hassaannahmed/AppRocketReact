@@ -3,3 +3,9 @@
   overflow: auto;
   flex: auto;
 }
+
+#check {
+  display: flex; /*added*/
+  flex-direction: column; /*added*/
+  position: relative;
+}
