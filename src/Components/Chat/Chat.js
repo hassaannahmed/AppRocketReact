@@ -26,7 +26,7 @@ import axios from 'axios';
 import ChatTextField from '../ChatTextField/ChatTextField';
 
 import socketIOClient from 'socket.io-client';
-const ENDPOINT = 'http://localhost:5000';
+const ENDPOINT = 'https://approcket-backend.herokuapp.com';
 
 const styles = (theme) => ({
   root: {
@@ -93,7 +93,10 @@ class Chat extends Component {
       conversationId: conversationId,
     };
     axios
-      .post('http://localhost:5000/api/conversations/messages', grabMessages)
+      .post(
+        'https://approcket-backend.herokuapp.com/api/conversations/messages',
+        grabMessages
+      )
       .then((res) => {
         this.setState({ conversation: res.data });
       });
@@ -106,9 +109,11 @@ class Chat extends Component {
 
   componentDidMount() {
     const body = { id: this.state.loggedIn };
-    axios.post('http://localhost:5000/api/conversations', body).then((res) => {
-      this.setState({ allConversations: res.data });
-    });
+    axios
+      .post('https://approcket-backend.herokuapp.com/api/conversations', body)
+      .then((res) => {
+        this.setState({ allConversations: res.data });
+      });
   }
   handleChange = (e) => {
     this.setState({ typed: e.target.value });
@@ -127,7 +132,7 @@ class Chat extends Component {
       typed: '',
     });
     axios.post(
-      'http://localhost:5000/api/conversations/messages/new',
+      'https://approcket-backend.herokuapp.com/api/conversations/messages/new',
       grabMessages
     );
   };

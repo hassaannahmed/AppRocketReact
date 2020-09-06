@@ -43,12 +43,14 @@ class Register extends Component {
     //this.props.joinChat();
     const { username, password } = this.props.state;
     const body = { username, password };
-    axios.post('http://localhost:5000/api/users/', body).then((res) => {
-      console.log(res.data);
-      if (res.data.msg == 'User Created') {
-        this.setState({ open: true });
-      }
-    });
+    axios
+      .post('https://approcket-backend.herokuapp.com/api/users/', body)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.msg == 'User Created') {
+          this.setState({ open: true });
+        }
+      });
   };
 
   goBack = (e) => {

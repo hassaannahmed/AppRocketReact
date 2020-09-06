@@ -39,10 +39,12 @@ class SearchBar extends Component {
   componentDidMount() {
     const body = { username: this.props.state.loggedInUsername };
     console.log(body);
-    axios.post('http://localhost:5000/api/users/getAll', body).then((res) => {
-      console.log(res.data);
-      this.setState({ contacts: res.data.data });
-    });
+    axios
+      .post('https://approcket-backend.herokuapp.com/api/users/getAll', body)
+      .then((res) => {
+        console.log(res.data);
+        this.setState({ contacts: res.data.data });
+      });
   }
 
   valueChange = (value) => {

@@ -44,7 +44,7 @@ class Login extends Component {
     const body = { username, password };
     console.log('sending' + username + password);
     axios
-      .post('http://localhost:5000/api/users/login', body)
+      .post('https://approcket-backend.herokuapp.com/api/users/login', body)
       .then((res) => {
         console.log(res.data);
         this.props.joinChat(res.data.data.id);
