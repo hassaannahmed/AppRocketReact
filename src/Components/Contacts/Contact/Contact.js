@@ -19,7 +19,11 @@ export class Contact extends Component {
 
   selectChat = (e) => {
     e.preventDefault();
-    this.props.changeChatWith(this.state.conversation._id);
+    const obj = {
+      conversationId: this.state.conversation._id,
+      conversationName: this.state.conversation.conversationName,
+    };
+    this.props.changeChatWith(obj);
   };
 
   render() {

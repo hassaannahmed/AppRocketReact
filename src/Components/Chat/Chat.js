@@ -81,44 +81,33 @@ class Chat extends Component {
   }
 
   // Change Chat With
-  changeChatWith = (id) => {
-    console.log('changing Chat with to' + id);
+  changeChatWith = (obj) => {
+    const { conversationId, conversationName } = obj;
 
     this.setState({
-      conversationId: id,
+      conversationId: conversationId,
+      chatWith: conversationName,
     });
     const grabMessages = {
       id: this.state.loggedIn,
-      conversationId: id,
+      conversationId: conversationId,
     };
     axios
       .post('http://localhost:5000/api/conversations/messages', grabMessages)
       .then((res) => {
-        console.log('All Messages');
         this.setState({ conversation: res.data });
       });
 
-    socket.emit('joinRoom', { userId: this.state.loggedIn, room: id });
+    socket.emit('joinRoom', {
+      userId: this.state.loggedIn,
+      room: conversationId,
+    });
   };
 
   componentDidMount() {
     const body = { id: this.state.loggedIn };
     axios.post('http://localhost:5000/api/conversations', body).then((res) => {
       this.setState({ allConversations: res.data });
-      let conversationId = this.state.conversationId;
-      if (this.state.conversationId == '') {
-        conversationId = res.data[0]._id;
-      }
-      const grabMessages = {
-        id: this.state.loggedIn,
-        conversationId: conversationId,
-      };
-      axios
-        .post('http://localhost:5000/api/conversations/messages', grabMessages)
-        .then((res) => {
-          console.log('All Messages');
-          this.setState({ conversation: res.data });
-        });
     });
   }
   handleChange = (e) => {
@@ -162,12 +151,14 @@ class Chat extends Component {
           </div>
           <div className='container'>
             <TopBar chatWith={this.state.chatWith} />
+
             <Messages
               conversation={this.state.conversation}
               loggedIn={this.state.loggedIn}
               loggedInUsername={this.state.loggedInUsername}
               chatWithUsername={this.state.chatWith}
             />
+
             <form
               className={classes.root}
               onSubmit={this.handleSubmit}

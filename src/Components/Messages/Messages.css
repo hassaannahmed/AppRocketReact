@@ -1,7 +1,8 @@
 .messages {
-  padding: 5% 0;
+  padding: 0 0;
   overflow: auto;
   flex: auto;
+  height: 80%;
 }
 
 #check {

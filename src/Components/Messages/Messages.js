@@ -6,11 +6,7 @@ import './Messages.css';
 import ScrollToBottom from 'react-scroll-to-bottom';
 
 import TextField from '@material-ui/core/TextField';
-const styles = (theme) => ({
-  root: {
-    height: '100',
-  },
-});
+const styles = (theme) => ({});
 class Messages extends Component {
   render() {
     const { classes } = this.props;
@@ -25,11 +21,7 @@ class Messages extends Component {
         />
       </div>
     ));
-    return (
-      <ScrollToBottom className='messages' className={classes.root}>
-        {messages}
-      </ScrollToBottom>
-    );
+    return <ScrollToBottom className='messages'>{messages}</ScrollToBottom>;
   }
 }
 
