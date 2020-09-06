@@ -20,6 +20,10 @@ import CardMedia from '@material-ui/core/CardMedia';
 import TopBar from '../TopBar/TopBar';
 import './Chat.css';
 import SearchBar from '../SearchBar/SearchBar';
+import Messages from '../Messages/Messages';
+import Contacts from '../Contacts/Contacts';
+import axios from 'axios';
+import ChatTextField from '../ChatTextField/ChatTextField';
 
 const styles = (theme) => ({
   root: {
@@ -45,25 +49,77 @@ class Chat extends Component {
   };
   constructor(props) {
     super(props);
-    console.log(props);
+    //console.log(props);
     this.state = {
       loggedIn: props.state.id,
       chatWith: '',
+      conversationId: '',
       loggedInUsername: props.state.username,
+      conversation: [],
+      allConversations: [],
+      typed: '',
     };
   }
 
-  login = (e) => {
-    e.preventDefault();
-    this.props.joinChat();
-  };
-  goBack = (e) => {
-    e.preventDefault();
-    this.props.goBack();
+  // Change Chat With
+  changeChatWith = (id) => {
+    console.log('changing Chat with to' + id);
+
+    this.setState({
+      conversationId: id,
+    });
+    const grabMessages = {
+      id: this.state.loggedIn,
+      conversationId: id,
+    };
+    axios
+      .post('http://localhost:5000/api/conversations/messages', grabMessages)
+      .then((res) => {
+        console.log('All Messages');
+        this.setState({ conversation: res.data });
+      });
   };
 
-  changeChatWith = (value) => {
-    this.setState({ chatWith: value });
+  componentDidMount() {
+    const body = { id: this.state.loggedIn };
+    axios.post('http://localhost:5000/api/conversations', body).then((res) => {
+      this.setState({ allConversations: res.data });
+      let conversationId = this.state.conversationId;
+      if (this.state.conversationId == '') {
+        conversationId = res.data[0]._id;
+      }
+      const grabMessages = {
+        id: this.state.loggedIn,
+        conversationId: conversationId,
+      };
+      axios
+        .post('http://localhost:5000/api/conversations/messages', grabMessages)
+        .then((res) => {
+          console.log('All Messages');
+          this.setState({ conversation: res.data });
+        });
+    });
+  }
+  handleChange = (e) => {
+    this.setState({ typed: e.target.value });
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    // Do Something with typed
+    const grabMessages = {
+      id: this.state.loggedIn,
+      conversationId: this.state.conversationId,
+      msgText: this.state.typed,
+    };
+    axios.post(
+      'http://localhost:5000/api/conversations/messages/new',
+      grabMessages
+    );
+
+    this.setState({
+      typed: '',
+    });
   };
 
   render() {
@@ -75,11 +131,35 @@ class Chat extends Component {
           <div className='contacts'>
             <SearchBar
               changeChatWith={this.changeChatWith}
+              conversation
               state={this.state}
+            />
+            <Contacts
+              allConversations={this.state.allConversations}
+              changeChatWith={this.changeChatWith}
             />
           </div>
           <div className='container'>
             <TopBar chatWith={this.state.chatWith} />
+            <Messages
+              conversation={this.state.conversation}
+              loggedIn={this.state.loggedIn}
+              loggedInUsername={this.state.loggedInUsername}
+              chatWithUsername={this.state.chatWith}
+            />
+            <form
+              className={classes.root}
+              onSubmit={this.handleSubmit}
+              noValidate
+              autoComplete='off'
+            >
+              <TextField
+                id='standard-basic'
+                label='Standard'
+                value={this.state.typed}
+                onChange={this.handleChange}
+              />
+            </form>
           </div>
         </div>
       </div>
